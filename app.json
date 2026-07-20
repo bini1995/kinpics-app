@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "KinPics",
+    "slug": "kinpics-app",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "plugins": ["expo-camera"],
+    "ios": { "supportsTablet": true },
+    "android": { "adaptiveIcon": { "backgroundColor": "#111827" } }
+  }
+}
