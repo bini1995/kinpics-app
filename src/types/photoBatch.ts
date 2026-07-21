@@ -22,5 +22,7 @@ export type SavedCrop = {
   batchId: string;
   capturedAt: string;
   uri: string;
+  restoredUri?: string;
+  restorations?: Record<string, { uri: string; restoredAt: string }>;
   boundary: CropBoundary;
 };
