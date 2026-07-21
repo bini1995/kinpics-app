@@ -22,3 +22,9 @@ export const croppedPhotoUri = async (batchId: string, photoId: string) => {
   await FileSystem.makeDirectoryAsync(batchDir, { intermediates: true });
   return `${batchDir}/${photoId}.jpg`;
 };
+
+export const restoredPhotoUri = async (batchId: string, photoId: string, modelId = 'restored') => {
+  const batchDir = `${ROOT}/${batchId}`;
+  await FileSystem.makeDirectoryAsync(batchDir, { intermediates: true });
+  return `${batchDir}/${photoId}-${modelId}.jpg`;
+};
