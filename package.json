@@ -5,7 +5,9 @@
   "main": "expo/AppEntry.js",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "verify:opencv": "npm run fixture:opencv -- --make-fixture /tmp/kinpics-real-photo-batch.jpg && python3 scripts/opencv_photo_contour_detector.py /tmp/kinpics-real-photo-batch.jpg --expect-count 3",
+    "fixture:opencv": "python3 scripts/opencv_photo_contour_detector.py"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.5.6",

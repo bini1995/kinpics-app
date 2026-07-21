@@ -9,6 +9,9 @@ type NativeContourDetector = {
 
 const detector = NativeModules.OpenCVPhotoContourDetector as NativeContourDetector | undefined;
 
+export const isNativeOpenCVPhotoContourDetectorLinked = (): boolean =>
+  typeof detector?.detectPhotoContours === 'function';
+
 const boundaryFromPoints = (id: string, points: Array<{ x: number; y: number }>): CropBoundary => ({
   id,
   topLeft: points[0],
@@ -17,13 +20,6 @@ const boundaryFromPoints = (id: string, points: Array<{ x: number; y: number }>)
   bottomLeft: points[3],
 });
 
-const fallbackBoundary = (id: string): CropBoundary => ({
-  id,
-  topLeft: { x: 0.08, y: 0.12 },
-  topRight: { x: 0.92, y: 0.12 },
-  bottomRight: { x: 0.92, y: 0.88 },
-  bottomLeft: { x: 0.08, y: 0.88 },
-});
 
 export const detectPhotosInFrame = async (uri: string): Promise<DetectedPhoto[]> => {
   if (detector?.detectPhotoContours) {
@@ -37,9 +33,9 @@ export const detectPhotosInFrame = async (uri: string): Promise<DetectedPhoto[]>
       }));
   }
 
-  // Development fallback keeps the capture/review/crop flow usable until the native
-  // OpenCV contour module is linked in the mobile shell.
-  return [{ id: 'photo-1', boundary: fallbackBoundary('photo-1'), confidence: 0.35 }];
+  throw new Error(
+    'OpenCVPhotoContourDetector.detectPhotoContours is not linked. Link the native OpenCV contour module and run npm run verify:opencv against real-photo fixtures before enabling capture.',
+  );
 };
 
 export const cropPhoto = async (
