@@ -7,12 +7,15 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
     "verify:opencv": "npm run fixture:opencv -- --make-fixture /tmp/kinpics-real-photo-batch.jpg && python3 scripts/opencv_photo_contour_detector.py /tmp/kinpics-real-photo-batch.jpg --expect-count 3",
-    "fixture:opencv": "python3 scripts/opencv_photo_contour_detector.py"
+    "fixture:opencv": "python3 scripts/opencv_photo_contour_detector.py",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.5.6",
     "expo": "^53.0.0",
     "expo-camera": "^16.1.0",
+    "expo-dev-client": "~5.2.4",
     "expo-file-system": "^18.1.0",
     "expo-image-manipulator": "^13.1.0",
     "react": "19.0.0",

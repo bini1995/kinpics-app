@@ -15,12 +15,12 @@ Restoration, cloud upload, payments, and ads are intentionally out of scope for 
 
 ## Manual QA target
 
-Use a device camera to photograph 3–4 printed photos on a table with visible spacing between them. Confirm each photo appears as a separate detected item on the review screen, adjust any incorrect crop with the slider, then save and verify the batch manifest and cropped JPEGs exist in app cache storage.
+Build and install a development build, not Expo Go, because Expo Go cannot load the custom OpenCV native module. Use a real device camera to photograph 3–4 printed photos on a table with visible spacing between them. Confirm each photo appears as a separate detected item on the review screen, adjust any incorrect crop with the slider, then save and verify the batch manifest and cropped JPEGs exist in app cache storage.
 
 ## OpenCV detection verification
 
 The capture flow now requires the real native module contract
-`OpenCVPhotoContourDetector.detectPhotoContours(uri)` to be present. The app no
+`OpenCVPhotoContourDetector.detectPhotoContours(uri)` to be present. The Android development build registers a React Native module backed by OpenCV's Android AAR (`org.opencv:opencv`) that decodes the captured URI, runs grayscale/blur/Canny/dilation contour detection on-device, and returns normalized four-point boundaries plus confidence scores. The app no
 longer falls back to a fake rectangle, so missing native linkage fails before
 restoration, payments, or other product layers depend on unverified detection.
 
@@ -36,3 +36,15 @@ npm run verify:opencv
 three bordered printed-photo targets on a temporary tabletop fixture. `npm run
 verify:opencv` regenerates that temporary fixture, runs the same contour contract shape against it, and
 fails unless OpenCV finds exactly three four-point photo contours.
+
+
+## Native development builds
+
+This project has been prebuilt so the generated `android/` and `ios/` projects are part of the app. Use development builds for native OpenCV QA:
+
+```sh
+npm run android
+npm run ios
+```
+
+The missing-link safety net remains in `src/services/photoDetection.ts`; if `NativeModules.OpenCVPhotoContourDetector.detectPhotoContours` is not present, capture throws instead of silently using fake detections.
