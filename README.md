@@ -38,6 +38,18 @@ verify:opencv` regenerates that temporary fixture, runs the same contour contrac
 fails unless OpenCV finds exactly three four-point photo contours.
 
 
+## Native QA handoff checklist
+
+The next task must happen on hardware that can build and run the native projects:
+
+1. On an Android workstation with Android Studio installed, pull this branch and resolve the missing Gradle wrapper JAR before running the app. Use one of these approaches:
+   - Option A: regenerate a trusted `android/gradle/wrapper/gradle-wrapper.jar` with the Gradle version declared in `android/gradle/wrapper/gradle-wrapper.properties`, then run the checked-in `android/gradlew` scripts normally.
+   - Option B: keep the wrapper JAR out of the repository and invoke the Android build through a locally installed, trusted Gradle distribution/Android Studio configuration that matches the wrapper properties.
+2. Run `npm run android` against a real Android device and confirm the development build launches with the native OpenCV module linked.
+3. On a Mac with Xcode and CocoaPods installed, pull this branch, run `cd ios && pod install`, then run `npm run ios` against a real iOS device.
+4. Perform manual QA on both platforms with real printed photos under real room lighting: place 3–4 separated prints on a table, capture them, verify each print is detected as a separate crop, adjust any crop with the review slider, save the batch, and inspect cache storage for the manifest plus cropped JPEGs.
+5. Only move to the restoration API task after both native builds succeed and contour-detection quality looks reasonable on real photo prints.
+
 ## Native development builds
 
 This project has been prebuilt so the generated `android/` and `ios/` projects are part of the app. Use development builds for native OpenCV QA:
