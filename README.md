@@ -16,3 +16,23 @@ Restoration, cloud upload, payments, and ads are intentionally out of scope for 
 ## Manual QA target
 
 Use a device camera to photograph 3–4 printed photos on a table with visible spacing between them. Confirm each photo appears as a separate detected item on the review screen, adjust any incorrect crop with the slider, then save and verify the batch manifest and cropped JPEGs exist in app cache storage.
+
+## OpenCV detection verification
+
+The capture flow now requires the real native module contract
+`OpenCVPhotoContourDetector.detectPhotoContours(uri)` to be present. The app no
+longer falls back to a fake rectangle, so missing native linkage fails before
+restoration, payments, or other product layers depend on unverified detection.
+
+Use the native OpenCV verification harness before building additional features:
+
+```sh
+python3 -m pip install -r scripts/requirements-opencv.txt
+npm run fixture:opencv -- --make-fixture /tmp/kinpics-real-photo-batch.jpg
+npm run verify:opencv
+```
+
+`npm run fixture:opencv -- --make-fixture /tmp/kinpics-real-photo-batch.jpg` downloads real photographic images and lays them out as
+three bordered printed-photo targets on a temporary tabletop fixture. `npm run
+verify:opencv` regenerates that temporary fixture, runs the same contour contract shape against it, and
+fails unless OpenCV finds exactly three four-point photo contours.
